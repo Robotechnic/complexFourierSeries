@@ -5,7 +5,7 @@ fourierFunction::fourierFunction() :
     processed(false),
     step(1),
     firstStep(true),
-    animationLenght(15),
+    animationLenght(0),
     ft(0)
 {
 
@@ -16,7 +16,7 @@ fourierFunction::fourierFunction(int precision, float step) :
     processed(false),
     step(step),
     firstStep(true),
-    animationLenght(precision*1.4),
+    animationLenght(0),
     ft(0)
 {
 
@@ -24,6 +24,8 @@ fourierFunction::fourierFunction(int precision, float step) :
 
 void fourierFunction::closeFunction(){
     this->addPointToPoint(this->points.at(this->points.size()-1),this->points.at(0));
+
+    animationLenght = this->points.size()*0.9;
 }
 
 void fourierFunction::addPoint(ofVec2f point){
@@ -75,16 +77,17 @@ void fourierFunction::calculateCoefs(){
 
 void fourierFunction::drawPoint(){
     if (this->processed){
-       ofSetColor(0,255,0);
+       ofSetColor(255);
 
        int start = 0;
-       if (ft > animationLenght && !firstStep){
-           start = ft-animationLenght;
+       if (!firstStep){
+           start = -animationLenght+ft;
        }
 
-       for (int i = start; i<ft; i++){
+       ofLog()<<start<<" "<<ft;
 
-           ofDrawRectangle(this->points.at((i < 0 ? this->points.size()-i-1 : i)) ,1,1);
+       for (int i = start; i<ft; i++){
+           ofDrawRectangle(this->points.at((i < 0 ? this->points.size() + i : i)) ,1,1);
        }
     } else {
         ofSetColor(255);
@@ -138,11 +141,9 @@ void fourierFunction::drawVectors(){
 
 void fourierFunction::evolve() {
     if (this->processed){
-        if (this->ft >= this->points.size()){
-            this->ft = 0;
-            this->firstStep = false;
-        } else {
-            this->ft ++;
+        ft = ft>=this->points.size()-1 ? 0 : ft+1;
+        if (this->firstStep && ft > animationLenght){
+            firstStep = false;
         }
     }
 }

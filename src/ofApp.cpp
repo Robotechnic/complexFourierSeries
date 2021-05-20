@@ -8,7 +8,7 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    f.evolve();
+   // f.evolve();
 }
 
 //--------------------------------------------------------------
@@ -26,6 +26,8 @@ void ofApp::keyPressed(int key){
     if (key == 'e'){
         f.evolve();
     }
+
+
 
     if (key == 'c'){
         f.clear();
