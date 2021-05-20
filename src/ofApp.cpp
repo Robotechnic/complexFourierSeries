@@ -2,22 +2,34 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-
+    f = fourierFunction{50};
+    //ofSetBackgroundAuto(false);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
+    f.evolve();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-
+    f.drawPoint();
+    f.drawVectors();
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
+    if (key == 'p'){
+        f.closeFunction();
+        f.calculateCoefs();
+    }
+    if (key == 'e'){
+        f.evolve();
+    }
 
+    if (key == 'c'){
+        f.clear();
+    }
 }
 
 //--------------------------------------------------------------
@@ -32,12 +44,12 @@ void ofApp::mouseMoved(int x, int y ){
 
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
-
+    f.addPoint(x,y);
 }
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
-
+    f.addPoint(x,y);
 }
 
 //--------------------------------------------------------------

@@ -12,6 +12,8 @@ Project{
         name: { return FileInfo.baseName(sourceDirectory) }
 
         files: [
+            "src/fourierfunction.cpp",
+            "src/fourierfunction.h",
             'src/main.cpp',
             'src/ofApp.cpp',
             'src/ofApp.h',
