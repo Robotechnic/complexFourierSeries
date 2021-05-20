@@ -43,6 +43,7 @@ private:
 
     int precision;
 
+    vector <ofVec2f>functionPoints;
     float ft;
     bool firstStep;
     int animationLenght;

@@ -76,24 +76,20 @@ void fourierFunction::calculateCoefs(){
 
 
 void fourierFunction::drawPoint(){
+    ofSetColor(0,255,0);
     if (this->processed){
-       ofSetColor(255);
-
-       int start = 0;
-       if (!firstStep){
-           start = -animationLenght+ft;
+       for (ofVec2f p : this->functionPoints){
+           ofDrawCircle(p ,1);
        }
 
-       ofLog()<<start<<" "<<ft;
-
-       for (int i = start; i<ft; i++){
-           ofDrawRectangle(this->points.at((i < 0 ? this->points.size() + i : i)) ,1,1);
+       if (this->functionPoints.size() > this->animationLenght){
+           this->functionPoints.erase(this->functionPoints.begin());
        }
-    } else {
-        ofSetColor(255);
-        for (ofVec2f p : this->points){
-            ofDrawRectangle(p ,1,1);
-        }
+    }
+
+    ofSetColor(255);
+    for (ofVec2f p : this->points){
+        ofDrawRectangle(p ,1,1);
     }
 }
 
@@ -137,6 +133,7 @@ void fourierFunction::drawVectors(){
 
     ofSetColor(0,255,0);
     ofDrawCircle(pos,2);
+    this->functionPoints.push_back(pos);
 }
 
 void fourierFunction::evolve() {
@@ -154,4 +151,5 @@ void fourierFunction::clear(){
     this->rotationsCoef.clear();
     this->processed = false;
     this->firstStep = true;
+    this->functionPoints.clear();
 }
