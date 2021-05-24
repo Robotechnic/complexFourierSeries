@@ -4,6 +4,8 @@
 void ofApp::setup(){
     f = fourierFunction{20};
     //ofSetBackgroundAuto(false);
+
+    ofLog()<<"0.1+0.2="<<0.1+0.2;
 }
 
 //--------------------------------------------------------------
