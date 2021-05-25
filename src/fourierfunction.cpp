@@ -6,7 +6,9 @@ fourierFunction::fourierFunction() :
     step(1),
     firstStep(true),
     animationLenght(0),
-    ft(0)
+    ft(0),
+    scale(1),
+    lastEvolve(0)
 {
 
 }
@@ -17,7 +19,9 @@ fourierFunction::fourierFunction(int precision, float step) :
     step(step),
     firstStep(true),
     animationLenght(0),
-    ft(0)
+    ft(0),
+    scale(1),
+    lastEvolve(0)
 {
 
 }
@@ -76,20 +80,20 @@ void fourierFunction::calculateCoefs(){
 
 
 void fourierFunction::drawPoint(){
-    ofSetColor(0,255,0);
-    if (this->processed){
-       for (ofVec2f p : this->functionPoints){
-           ofDrawCircle(p ,1);
-       }
-
-       if (this->functionPoints.size() > this->animationLenght){
-           this->functionPoints.erase(this->functionPoints.begin());
-       }
+    ofSetColor(255);
+    for (int i = 1; i<this->points.size(); i++){
+         ofDrawLine(this->points.at(i-1),this->points.at(i));
     }
 
-    ofSetColor(255);
-    for (ofVec2f p : this->points){
-        ofDrawRectangle(p ,1,1);
+    ofSetColor(0,255,0);
+    if (this->processed){
+       for (int i = 1; i<this->functionPoints.size(); i++){
+           ofDrawLine(this->functionPoints.at(i-1),this->functionPoints.at(i));
+       }
+
+       if (this->functionPoints.size() > this->animationLenght*1/this->scale){
+           this->functionPoints.erase(this->functionPoints.begin());
+       }
     }
 }
 
@@ -116,33 +120,48 @@ void fourierFunction::drawVectors(){
     if (!this->processed)
         return;
 
+    for (int i = 1; i<this->vectorsPos.size(); i++){
+         ofDrawArrow({this->vectorsPos.at(i-1).x,this->vectorsPos.at(i-1).y,0},
+                     {this->vectorsPos.at(i).x,this->vectorsPos.at(i).y,0},3/this->scale);
+    }
+}
+
+void fourierFunction::evolve() {
+    if (this->processed ){
+        ft = ft>=this->points.size()-1 ? 0 : ft+this->speed;
+        if (this->firstStep && ft > animationLenght){
+            firstStep = false;
+        }
+
+        this->calcVectorsPos();
+    }
+}
+
+void fourierFunction::calcVectorsPos(){
+    if (!this->processed)
+        return;
+
+    this->vectorsPos.clear();
+
     ofVec2f pos;
     ofVec2f lastPos;
     lastPos = this->getNvalue(0); //with this line, the vectors always stay at center
     pos += lastPos;
 
+    this->vectorsPos.push_back(pos);
+
     ofSetColor(100,255,200);
     for (int n = 1; n<=this->precision; n++){
         lastPos = pos;
         pos += this->getNvalue(n);
-        ofDrawArrow(ofVec3f(lastPos.x,lastPos.y,1),ofVec3f(pos.x,pos.y,1),3);
+        this->vectorsPos.push_back(pos);
         lastPos = pos;
         pos += this->getNvalue(-n);
-        ofDrawArrow(ofVec3f(lastPos.x,lastPos.y,1),ofVec3f(pos.x,pos.y,1),3);
+        this->vectorsPos.push_back(pos);
     }
 
-    ofSetColor(0,255,0);
-    ofDrawCircle(pos,2);
+    currentPoint = pos;
     this->functionPoints.push_back(pos);
-}
-
-void fourierFunction::evolve() {
-    if (this->processed){
-        ft = ft>=this->points.size()-1 ? 0 : ft+1;
-        if (this->firstStep && ft > animationLenght){
-            firstStep = false;
-        }
-    }
 }
 
 
@@ -152,4 +171,6 @@ void fourierFunction::clear(){
     this->processed = false;
     this->firstStep = true;
     this->functionPoints.clear();
+    this->vectorsPos.clear();
+    this->currentPoint = {0,0};
 }

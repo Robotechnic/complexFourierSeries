@@ -20,7 +20,7 @@ Project{
         ]
 
         of.addons: [
-
+            "ofxDatGui"
         ]
 
         // additional flags for the project. the of module sets some
@@ -35,7 +35,7 @@ Project{
         // and can be checked with #ifdef or #if in the code
         of.frameworks: []       // osx only, additional frameworks to link with the project
         of.staticLibraries: []  // static libraries
-        of.dynamicLibraries: [] // dynamic libraries
+        of.dynamicLibraries: ["Qt5Widgets"] // dynamic libraries
 
         // create a console window when the application start
         consoleApplication: false

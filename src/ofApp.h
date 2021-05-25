@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "fourierfunction.h"
+#include "ofxDatGui.h"
 
 class ofApp : public ofBaseApp{
 
@@ -24,4 +25,5 @@ public:
 
     fourierFunction f;
 
+    ofxDatGui *gui;
 };
